@@ -95,22 +95,72 @@ class _HomeState extends State<Home> {
             padding: const EdgeInsets.only(
               left: 20,
             ),
-            child: Image.asset(
-              "assets/images/logo.png",
-              fit: BoxFit.contain,
-              color: AppColors.white,
+            child: Text(
+              "News Section",
+              style: TextStyle(
+                color: AppColors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),
         backgroundColor: AppColors.black,
         elevation: 5,
-        actions: const [
+        actions: [
           Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Icon(
-              Icons.search,
-              size: 34,
-              color: AppColors.white,
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              icon: const Icon(
+                Icons.search,
+                size: 34,
+                color: AppColors.white,
+              ),
+              onPressed: () async {
+                String? query = await showDialog<String>(
+                  context: context,
+                  builder: (context) {
+                    TextEditingController controller = TextEditingController();
+                    return AlertDialog(
+                      title: const Text('Search News'),
+                      content: TextField(
+                        controller: controller,
+                        autofocus: true,
+                        decoration: const InputDecoration(
+                          hintText: 'Enter keyword',
+                        ),
+                        onSubmitted: (value) => Navigator.of(context).pop(value),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(controller.text),
+                          child: const Text('Search'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+                if (query != null && query.trim().isNotEmpty) {
+                  setState(() {
+                    articles = [];
+                    page = 1;
+                    isFinish = false;
+                    data = false;
+                  });
+                  // Fetch news for the search query
+                  ListData listData = await NewsProvider().GetEverything(query.trim(), page++);
+                  if (listData.status) {
+                    List<m.News> items = listData.data as List<m.News>;
+                    setState(() {
+                      articles.addAll(items);
+                      data = true;
+                      if (items.length == listData.totalContent) {
+                        isFinish = true;
+                      }
+                    });
+                  }
+                }
+              },
             ),
           )
         ],

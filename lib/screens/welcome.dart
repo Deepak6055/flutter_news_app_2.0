@@ -61,9 +61,14 @@ class _WelcomeState extends State<Welcome> {
               ),
               SizedBox(
                 width: 130,
-                child: Image.asset(
-                  "assets/images/logo.png",
-                  fit: BoxFit.contain,
+                child: Text(
+                  "Welcome to News Section",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.black,
+                  ),
                 ),
               ),
               SizedBox(
