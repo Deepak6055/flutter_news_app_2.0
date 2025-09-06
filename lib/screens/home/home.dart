@@ -18,12 +18,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<String> categories = [
-    'business',
-    'entertainment',
-    'general',
-    'health',
-    'science',
-    'sports',
     'technology'
   ];
 
